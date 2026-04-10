@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from routers import search
-
 app = FastAPI(
     title='AstroQuery API',
     description='API para consulta de objetos astronômicos em múltiplos catálogos.',
@@ -16,19 +14,19 @@ ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:5173',
     'http://127.0.0.1:3000',
-    'http://0.0.0.0:3000',
     'http://127.0.0.1:5173',
     'https://cosmic-axolotl.github.io',
-    'https://cosmic-axolotl.github.io/astronomy-n-science/',
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=False, 
+    allow_credentials=False,
     allow_methods=['GET', 'POST', 'OPTIONS'],
     allow_headers=['*'],
 )
+
+from routers import search
 app.include_router(search.router)
 
 
