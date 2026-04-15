@@ -5,6 +5,8 @@ import ObjectCard from './components/ObjectCard';
 import ResultTable from './components/ResultTable';
 import ClusterCard from './components/ClusterCard';
 import SolarBodyCard from './components/SolarBodyCard';
+import ExoplanetCard from './components/ExoplanetCard';
+import SmallBodyCard from './components/SmallBodyCard';
 import ListItemModal from './components/ListItemModal';
 import { searchObject, searchByType, searchCluster, searchPlanet, searchExoplanet, searchSmallBody } from './api';
 import { resolveObjectName, getSuggestions, OBJECT_CATEGORIES } from './utils/dictionary';
@@ -58,7 +60,8 @@ const EXOPLANET_KEYWORDS = [
 
 const ASTEROID_KEYWORDS = [
   'asteroid', 'asteroide', 'apophis', 'ceres', 'bennu', 'vesta',
-  'halley', 'hale-bopp', 'comet', 'cometa',
+  'halley', 'hale-bopp', 'comet', 'cometa', '1p', '2p', '67p',
+  'churyumov', 'shoemaker', 'tempel',
 ];
 
 export default function App() {
@@ -80,8 +83,8 @@ export default function App() {
     if (!raw) return;
 
     const term = resolveObjectName(raw);
-    const termLow = term.toLowerCase();
     const rawLow = raw.toLowerCase();
+    const termLow = term.toLowerCase();
 
     setLoading(true);
     setResult(null);
@@ -93,8 +96,7 @@ export default function App() {
       const isClass = CLASS_KEYWORDS.some(kw => termLow.includes(kw)) && !isCluster;
       const isSolar = SOLAR_KEYWORDS.some(kw => termLow.includes(kw) || rawLow.includes(kw));
       const isExo = EXOPLANET_KEYWORDS.some(kw => termLow.includes(kw) || rawLow.includes(kw));
-      const isAsteroid = ASTEROID_KEYWORDS.some(kw => termLow.includes(kw) || rawLow.includes(kw));
-
+      const isAsteroid = ASTEROID_KEYWORDS.some(kw => rawLow.includes(kw) || termLow.includes(kw));
       if (isSolar && !isCluster && !isClass) {
         const data = await searchPlanet(raw);
         setResult({ mode: 'solar_body', ...data });
@@ -261,6 +263,8 @@ export default function App() {
         {result?.mode === 'single' && <ObjectCard data={result} />}
         {result?.mode === 'cluster' && <ClusterCard data={result} />}
         {result?.mode === 'solar_body' && <SolarBodyCard data={result} />}
+        {result?.mode === 'exoplanet' && <ExoplanetCard data={result} />}
+        {result?.mode === 'small_body' && <SmallBodyCard data={result} />}
 
         {/* List result */}
         {result?.mode === 'list' && (

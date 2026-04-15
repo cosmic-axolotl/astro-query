@@ -61,6 +61,11 @@ export const OBJECT_DICTIONARY = {
     'sgr a': 'NAME Sgr A*',
     'sgr a*': 'NAME Sgr A*',
     'm87': 'M  87',
+
+    //cometas
+    'halley': '1P',
+    'hale-bopp': 'C/1995 O1',
+    'comet halley': '1P',
 };
 
 // Sugestões quando o objeto não é encontrado
@@ -176,7 +181,7 @@ export const OBJECT_CATEGORIES = [
         examples: [
             { label: 'Apophis', q: 'apophis' },
             { label: 'Ceres', q: 'ceres' },
-            { label: 'Halley', q: 'halley' },
+            { label: 'Halley', q: "1p" },
         ],
     },
 ];
