@@ -39,3 +39,22 @@ export async function searchCluster(name, limit = 50) {
         throw err;
     }
 }
+
+export async function searchPlanet(name) {
+    const response = await api.get('/search/planet', { params: { name } });
+    return response.data;
+}
+
+export async function searchExoplanet(name, host = null, habitable = false, limit = 20) {
+    const params = { limit };
+    if (name) params.name = name;
+    if (host) params.host = host;
+    if (habitable) params.habitable = true;
+    const response = await api.get('/search/exoplanet', { params });
+    return response.data;
+}
+
+export async function searchSmallBody(name) {
+    const response = await api.get('/search/smallbody', { params: { name } });
+    return response.data;
+}
