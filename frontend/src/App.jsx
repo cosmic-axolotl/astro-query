@@ -21,6 +21,7 @@ const LANG = {
     serverError: 'Erro ao conectar ao servidor.',
     suggestions: 'Você quis dizer:',
     queryLabel: 'RESULTADO:',
+    classSearch: 'BUSCA POR CLASSE DE OBJETO',
   },
   en: {
     subtitle: 'Astronomical object database',
@@ -31,6 +32,7 @@ const LANG = {
     serverError: 'Error connecting to server.',
     suggestions: 'Did you mean:',
     queryLabel: 'RESULT:',
+    classSearch: 'SEARCH BY OBJECT CLASS',
   },
 };
 
@@ -64,6 +66,24 @@ const ASTEROID_KEYWORDS = [
   'churyumov', 'shoemaker', 'tempel',
 ];
 
+const CLASS_BUTTONS = [
+  { labelPT: 'Wolf-Rayet', labelEN: 'Wolf-Rayet', q: 'wolf rayet', color: '#ff6a3d' },
+  { labelPT: 'Pulsar', labelEN: 'Pulsar', q: 'pulsar', color: '#4a9fd4' },
+  { labelPT: 'Cefeida', labelEN: 'Cepheid', q: 'cepheid', color: '#f5c542' },
+  { labelPT: 'Anã Branca', labelEN: 'White Dwarf', q: 'white dwarf', color: '#c8dff0' },
+  { labelPT: 'Gigante Vermelha', labelEN: 'Red Giant', q: 'red giant', color: '#f57a4a' },
+  { labelPT: 'Supergigante', labelEN: 'Supergiant', q: 'supergiant', color: '#f5a030' },
+  { labelPT: 'Nebulosa Planetária', labelEN: 'Planetary Nebula', q: 'planetary nebula', color: '#4af5c2' },
+  { labelPT: 'Galáxia', labelEN: 'Galaxy', q: 'galaxy', color: '#b06af5' },
+  { labelPT: 'Quasar', labelEN: 'Quasar', q: 'quasar', color: '#9a6af5' },
+  { labelPT: 'AGN', labelEN: 'AGN', q: 'agn', color: '#7a4af5' },
+  { labelPT: 'Buraco Negro', labelEN: 'Black Hole', q: 'black hole', color: '#888888' },
+  { labelPT: 'Anã Marrom', labelEN: 'Brown Dwarf', q: 'brown dwarf', color: '#8a5a3a' },
+  { labelPT: 'RR Lyrae', labelEN: 'RR Lyrae', q: 'rr lyrae', color: '#f5e642' },
+  { labelPT: 'Aglomerado Aberto', labelEN: 'Open Cluster', q: 'open cluster', color: '#4af5c2' },
+  { labelPT: 'Aglomerado Globular', labelEN: 'Globular Cluster', q: 'globular', color: '#4ac2f5' },
+];
+
 export default function App() {
   const [query, setQuery] = useState('');
   const [options, setOptions] = useState({ hipparcos: true, twoMass: true, ads: false });
@@ -93,25 +113,26 @@ export default function App() {
 
     try {
       const isCluster = CLUSTER_KEYWORDS.some(kw => termLow.includes(kw) || rawLow.includes(kw));
-      const isClass = CLASS_KEYWORDS.some(kw => termLow.includes(kw)) && !isCluster;
+      const isClass = CLASS_KEYWORDS.some(kw => rawLow.includes(kw) || termLow.includes(kw)) && !isCluster;
       const isSolar = SOLAR_KEYWORDS.some(kw => termLow.includes(kw) || rawLow.includes(kw));
       const isExo = EXOPLANET_KEYWORDS.some(kw => termLow.includes(kw) || rawLow.includes(kw));
       const isAsteroid = ASTEROID_KEYWORDS.some(kw => rawLow.includes(kw) || termLow.includes(kw));
-      if (isSolar && !isCluster && !isClass) {
+
+      if (isClass) {
+        const data = await searchByType(raw, limit);
+        setResult({ mode: 'list', ...data });
+      } else if (isSolar && !isCluster) {
         const data = await searchPlanet(raw);
         setResult({ mode: 'solar_body', ...data });
-      } else if (isExo && !isCluster && !isClass) {
+      } else if (isExo && !isCluster) {
         const data = await searchExoplanet(raw);
         setResult({ mode: 'exoplanet', ...data });
-      } else if (isAsteroid && !isCluster && !isClass) {
+      } else if (isAsteroid && !isCluster) {
         const data = await searchSmallBody(raw);
         setResult({ mode: 'small_body', ...data });
       } else if (isCluster) {
         const data = await searchCluster(term, limit);
         setResult({ mode: 'cluster', ...data });
-      } else if (isClass) {
-        const data = await searchByType(term, limit);
-        setResult({ mode: 'list', ...data });
       } else {
         const data = await searchObject(term, options);
         setResult({ mode: 'single', ...data });
@@ -140,18 +161,16 @@ export default function App() {
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
             {['pt', 'en'].map(l => (
-              <button key={l} onClick={() => setLang(l)}
-                style={{
-                  background: lang === l ? '#0a2535' : 'transparent',
-                  border: '1px solid',
-                  borderColor: lang === l ? '#2a7ab0' : '#0e2a3a',
-                  color: lang === l ? '#4a9fd4' : '#2a5a7a',
-                  fontFamily: 'monospace', fontSize: '11px',
-                  padding: '4px 12px', cursor: 'pointer',
-                  borderRadius: l === 'pt' ? '3px 0 0 3px' : '0 3px 3px 0',
-                  transition: 'all 0.15s',
-                }}
-              >{l.toUpperCase()}</button>
+              <button key={l} onClick={() => setLang(l)} style={{
+                background: lang === l ? '#0a2535' : 'transparent',
+                border: '1px solid',
+                borderColor: lang === l ? '#2a7ab0' : '#0e2a3a',
+                color: lang === l ? '#4a9fd4' : '#2a5a7a',
+                fontFamily: 'monospace', fontSize: '11px',
+                padding: '4px 12px', cursor: 'pointer',
+                borderRadius: l === 'pt' ? '3px 0 0 3px' : '0 3px 3px 0',
+                transition: 'all 0.15s',
+              }}>{l.toUpperCase()}</button>
             ))}
           </div>
 
@@ -160,15 +179,12 @@ export default function App() {
           </div>
 
           <h1 style={{
-            margin: 0,
-            fontSize: 'clamp(36px, 8vw, 72px)',
+            margin: 0, fontSize: 'clamp(36px, 8vw, 72px)',
             fontFamily: "'Georgia', serif",
             background: 'linear-gradient(135deg, #a8d4f5 0%, #4a9fd4 40%, #9a6af5 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             letterSpacing: '0.04em', lineHeight: 1.1,
-          }}>
-            AstroQuery
-          </h1>
+          }}>AstroQuery</h1>
 
           <p style={{ color: '#1a3a5a', fontFamily: 'monospace', fontSize: '12px', marginTop: '12px', letterSpacing: '0.12em' }}>
             {T.sources}
@@ -176,19 +192,11 @@ export default function App() {
         </div>
 
         {/* Categories */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-          gap: '12px', marginBottom: '36px',
-        }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '12px', marginBottom: '24px' }}>
           {OBJECT_CATEGORIES.map(cat => (
             <div key={cat.id}
-              style={{
-                background: '#040b14', border: `1px solid ${cat.color}33`,
-                borderTop: `3px solid ${cat.color}`, borderRadius: '6px',
-                padding: '16px 14px', cursor: 'pointer', transition: 'all 0.2s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#071220'; e.currentTarget.style.boxShadow = `0 0 20px ${cat.color}22`; }}
+              style={{ background: '#040b14', border: '1px solid ' + cat.color + '33', borderTop: '3px solid ' + cat.color, borderRadius: '6px', padding: '16px 14px', cursor: 'pointer', transition: 'all 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#071220'; e.currentTarget.style.boxShadow = '0 0 20px ' + cat.color + '22'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#040b14'; e.currentTarget.style.boxShadow = 'none'; }}
               onClick={() => { const ex = cat.examples[0]; setQuery(ex.label); handleSearch(ex.q); }}
             >
@@ -213,6 +221,31 @@ export default function App() {
           ))}
         </div>
 
+        {/* Class Search */}
+        <div style={{ marginBottom: '28px' }}>
+          <div style={{ color: '#3a7a9a', fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.2em', marginBottom: '12px' }}>
+            🔍 {T.classSearch}
+          </div>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {CLASS_BUTTONS.map(cls => (
+              <button key={cls.q}
+                onClick={() => { setQuery(lang === 'pt' ? cls.labelPT : cls.labelEN); handleSearch(cls.q); }}
+                style={{
+                  padding: '5px 14px', background: 'transparent',
+                  border: '1px solid ' + cls.color + '44',
+                  borderRadius: '3px', color: cls.color,
+                  fontFamily: 'monospace', fontSize: '11px',
+                  cursor: 'pointer', transition: 'all 0.15s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = cls.color + '18'; e.currentTarget.style.borderColor = cls.color; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = cls.color + '44'; }}
+              >
+                {lang === 'pt' ? cls.labelPT : cls.labelEN}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Search */}
         <SearchBar
           query={query} setQuery={setQuery}
@@ -224,12 +257,10 @@ export default function App() {
         {/* Loading */}
         {loading && (
           <div style={{ marginTop: '32px', padding: '48px', border: '1px solid #0a1e30', borderRadius: '4px', background: '#020810', textAlign: 'center' }}>
-            <div style={{ color: '#1a4a6a', fontFamily: 'monospace', fontSize: '13px', letterSpacing: '0.25em' }}>
-              {T.querying}
-            </div>
+            <div style={{ color: '#1a4a6a', fontFamily: 'monospace', fontSize: '13px', letterSpacing: '0.25em' }}>{T.querying}</div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '16px' }}>
               {['SIMBAD', 'VizieR', 'Hipparcos', '2MASS'].map((s, i) => (
-                <span key={s} style={{ color: '#1a4a6a', fontFamily: 'monospace', fontSize: '10px', animation: `pulse ${1 + i * 0.2}s infinite` }}>{s}</span>
+                <span key={s} style={{ color: '#1a4a6a', fontFamily: 'monospace', fontSize: '10px', animation: 'pulse ' + (1 + i * 0.2) + 's infinite' }}>{s}</span>
               ))}
             </div>
           </div>
@@ -277,15 +308,13 @@ export default function App() {
 
             <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', marginTop: '14px' }}>
               {[['cards', '⊞ CARDS'], ['table', '≡ TABLE']].map(([v, l]) => (
-                <button key={v} onClick={() => setView(v)}
-                  style={{
-                    padding: '5px 14px', fontFamily: 'monospace', fontSize: '11px',
-                    border: '1px solid', borderRadius: '2px', cursor: 'pointer',
-                    background: view === v ? '#0a2535' : 'transparent',
-                    borderColor: view === v ? '#2a7ab0' : '#0e2a3a',
-                    color: view === v ? '#4a9fd4' : '#2a5a7a', transition: 'all 0.15s',
-                  }}
-                >{l}</button>
+                <button key={v} onClick={() => setView(v)} style={{
+                  padding: '5px 14px', fontFamily: 'monospace', fontSize: '11px',
+                  border: '1px solid', borderRadius: '2px', cursor: 'pointer',
+                  background: view === v ? '#0a2535' : 'transparent',
+                  borderColor: view === v ? '#2a7ab0' : '#0e2a3a',
+                  color: view === v ? '#4a9fd4' : '#2a5a7a', transition: 'all 0.15s',
+                }}>{l}</button>
               ))}
             </div>
 
@@ -296,7 +325,7 @@ export default function App() {
                     onClick={() => setSelectedObj(selectedObj?.name === obj.name ? null : obj)}
                     style={{
                       background: selectedObj?.name === obj.name ? '#06101c' : '#040b14',
-                      border: `1px solid ${selectedObj?.name === obj.name ? '#1e4a7a' : '#0e2540'}`,
+                      border: '1px solid ' + (selectedObj?.name === obj.name ? '#1e4a7a' : '#0e2540'),
                       borderLeft: '3px solid #4a9fd4', borderRadius: '4px',
                       padding: '16px 18px', cursor: 'pointer', transition: 'all 0.2s',
                     }}
