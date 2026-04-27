@@ -25,7 +25,6 @@ app.add_middleware(
     allow_methods=['GET', 'POST', 'OPTIONS'],
     allow_headers=['*'],
 )
-
 from routers import search
 app.include_router(search.router)
 
