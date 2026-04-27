@@ -10,22 +10,18 @@ app = FastAPI(
     version='0.2.0',
 )
 
-ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:5173',
-    'https://cosmic-axolotl.github.io',
-    'https://cosmic-axolotl.github.io',
-
-]
+from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=False,
-    allow_methods=['GET', 'POST', 'OPTIONS'],
-    allow_headers=['*'],
+    allow_origins=[
+        "https://cosmic-axolotl.github.io",
+        "http://localhost:5173",  # dev local
+        "http://localhost:3000",
+    ],
+    allow_credentials=True,
+    allow_methods=['GET','POST','OPTIONS'],
+    allow_headers=["*"],
 )
 from routers import search
 app.include_router(search.router)
