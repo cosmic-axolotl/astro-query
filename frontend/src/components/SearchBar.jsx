@@ -12,7 +12,7 @@ const HELP_CONTENT = {
         sections: [
             {
                 title: '⭐ Estrelas',
-                content: 'Use o nome canônico do SIMBAD. Exemplos: "* alf Ori" (Betelgeuse), "* alf CMa" (Sirius). Nomes populares como "Betelgeuse" ou "Andromeda" também funcionam — o sistema converte automaticamente.',
+                content: 'Use o nome canônico do SIMBAD ou nomes populares como "Betelgeuse", "Sirius". O sistema converte automaticamente.',
             },
             {
                 title: '🔍 Busca por Classe de Objeto',
@@ -38,23 +38,23 @@ const HELP_CONTENT = {
             },
             {
                 title: '🌌 Galáxias e Nebulosas',
-                content: 'Use a designação Messier (M31, M42) ou NGC (NGC 224). Nomes populares como "Andromeda" ou "Orion Nebula" são reconhecidos automaticamente.',
+                content: 'Use designação Messier (M31, M42) ou NGC (NGC 224). Nomes populares como "Andromeda" são reconhecidos automaticamente.',
             },
             {
                 title: '✨ Aglomerados',
-                content: 'Digite o nome popular (Pleiades, Hyades, Omega Centauri) ou a designação (M13, NGC 2516). O sistema busca o aglomerado e lista seus membros catalogados.',
+                content: 'Digite o nome popular (Pleiades, Hyades, Omega Centauri) ou designação (M13, NGC 2516).',
             },
             {
                 title: '🪐 Exoplanetas',
-                content: 'Use o nome oficial: "55 Cnc e", "TRAPPIST-1 b", "HD 209458 b". Para listar todos os planetas de uma estrela, digite o nome da estrela hospedeira.',
+                content: 'Use o nome oficial: "55 Cnc e", "TRAPPIST-1 b", "HD 209458 b".',
             },
             {
                 title: '☀️ Sistema Solar',
-                content: 'Digite o nome em inglês: mars, jupiter, saturn, moon, voyager1, jwst. O sistema retorna a posição atual via JPL Horizons.',
+                content: 'Digite o nome: mars, jupiter, saturn, moon, voyager1, jwst. Retorna posição atual via JPL Horizons.',
             },
             {
                 title: '☄️ Asteroides e Cometas',
-                content: 'Digite o nome: "apophis", "ceres", "halley", "hale-bopp". O sistema busca dados orbitais e físicos no JPL Small-Body Database.',
+                content: 'Digite o nome: "apophis", "ceres", "halley", "1P". Busca no JPL Small-Body Database.',
             },
         ],
         fields: {
@@ -68,7 +68,6 @@ const HELP_CONTENT = {
                 ['Vel. Radial', 'Velocidade de afastamento/aproximação em km/s'],
                 ['B-V', 'Índice de cor: negativo = azul (quente), positivo = vermelho (frio)'],
                 ['Redshift (z)', 'Para galáxias distantes: expansão do universo. z=0.1 ≈ 1.3 bilhões ly'],
-                ['Match Score', 'Similaridade do resultado com a busca (0-100%)'],
             ],
         },
     },
@@ -77,7 +76,7 @@ const HELP_CONTENT = {
         sections: [
             {
                 title: '⭐ Stars',
-                content: 'Use the SIMBAD canonical name. Examples: "* alf Ori" (Betelgeuse), "* alf CMa" (Sirius). Popular names like "Betelgeuse" or "Andromeda" also work — the system converts automatically.',
+                content: 'Use SIMBAD canonical name or popular names like "Betelgeuse", "Sirius". The system converts automatically.',
             },
             {
                 title: '🔍 Object Class Search',
@@ -103,23 +102,23 @@ const HELP_CONTENT = {
             },
             {
                 title: '🌌 Galaxies & Nebulae',
-                content: 'Use Messier (M31, M42) or NGC (NGC 224) designations. Popular names like "Andromeda" or "Orion Nebula" are recognized automatically.',
+                content: 'Use Messier (M31, M42) or NGC (NGC 224) designations. Popular names like "Andromeda" are recognized automatically.',
             },
             {
                 title: '✨ Clusters',
-                content: 'Type the popular name (Pleiades, Hyades, Omega Centauri) or designation (M13, NGC 2516). The system finds the cluster and lists its catalogued members.',
+                content: 'Type the popular name (Pleiades, Hyades, Omega Centauri) or designation (M13, NGC 2516).',
             },
             {
                 title: '🪐 Exoplanets',
-                content: 'Use the official name: "55 Cnc e", "TRAPPIST-1 b", "HD 209458 b". To list all planets of a star, type the host star name.',
+                content: 'Use the official name: "55 Cnc e", "TRAPPIST-1 b", "HD 209458 b".',
             },
             {
                 title: '☀️ Solar System',
-                content: 'Type the name in English: mars, jupiter, saturn, moon, voyager1, jwst. The system returns the current position via JPL Horizons.',
+                content: 'Type the name: mars, jupiter, saturn, moon, voyager1, jwst. Returns current position via JPL Horizons.',
             },
             {
                 title: '☄️ Asteroids & Comets',
-                content: 'Type the name: "apophis", "ceres", "halley", "hale-bopp". The system fetches orbital and physical data from JPL Small-Body Database.',
+                content: 'Type the name: "apophis", "ceres", "halley", "1P". Searches JPL Small-Body Database.',
             },
         ],
         fields: {
@@ -133,7 +132,6 @@ const HELP_CONTENT = {
                 ['Radial Vel.', 'Recession/approach speed in km/s'],
                 ['B-V', 'Color index: negative = blue (hot), positive = red (cool)'],
                 ['Redshift (z)', 'For distant galaxies: universe expansion. z=0.1 ≈ 1.3 billion ly'],
-                ['Match Score', 'Result similarity to the search query (0-100%)'],
             ],
         },
     },
@@ -151,18 +149,12 @@ function HelpModal({ lang, onClose }) {
                 zIndex: 100, backdropFilter: 'blur(3px)',
             }} />
             <div style={{
-                position: 'fixed',
-                top: '50%', left: '50%',
+                position: 'fixed', top: '50%', left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: 'min(92vw, 680px)',
-                maxHeight: '82vh',
-                overflowY: 'auto',
-                background: '#050d18',
-                border: '1px solid #1a3050',
-                borderTop: '3px solid #4a9fd4',
-                borderRadius: '6px',
-                padding: '28px',
-                zIndex: 101,
+                width: 'min(92vw, 680px)', maxHeight: '82vh',
+                overflowY: 'auto', background: '#050d18',
+                border: '1px solid #1a3050', borderTop: '3px solid #4a9fd4',
+                borderRadius: '6px', padding: '28px', zIndex: 101,
             }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                     <h2 style={{ margin: 0, fontFamily: 'Georgia, serif', fontSize: '20px', color: '#e8f4ff' }}>
@@ -175,7 +167,6 @@ function HelpModal({ lang, onClose }) {
                     }}>✕</button>
                 </div>
 
-                {/* Tabs */}
                 <div style={{ display: 'flex', gap: '6px', marginBottom: '20px' }}>
                     {[
                         ['search', lang === 'pt' ? 'Como Pesquisar' : 'How to Search'],
@@ -186,8 +177,7 @@ function HelpModal({ lang, onClose }) {
                             border: '1px solid', borderRadius: '2px', cursor: 'pointer',
                             background: tab === t ? '#0a2535' : 'transparent',
                             borderColor: tab === t ? '#2a7ab0' : '#0e2a3a',
-                            color: tab === t ? '#4a9fd4' : '#2a5a7a',
-                            transition: 'all 0.15s',
+                            color: tab === t ? '#4a9fd4' : '#2a5a7a', transition: 'all 0.15s',
                         }}>{l}</button>
                     ))}
                 </div>
@@ -205,14 +195,8 @@ function HelpModal({ lang, onClose }) {
                                 {s.types && (
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginTop: '8px' }}>
                                         {s.types.map(([type, desc]) => (
-                                            <div key={type} style={{
-                                                display: 'flex', gap: '10px', padding: '5px 0',
-                                                borderBottom: '1px solid #0a1e30',
-                                            }}>
-                                                <span style={{
-                                                    color: '#4af5c2', fontFamily: 'monospace', fontSize: '11px',
-                                                    minWidth: '170px', flexShrink: 0,
-                                                }}>
+                                            <div key={type} style={{ display: 'flex', gap: '10px', padding: '5px 0', borderBottom: '1px solid #0a1e30' }}>
+                                                <span style={{ color: '#4af5c2', fontFamily: 'monospace', fontSize: '11px', minWidth: '170px', flexShrink: 0 }}>
                                                     "{type}"
                                                 </span>
                                                 <span style={{ color: '#5a8ab0', fontFamily: 'Georgia, serif', fontSize: '11px', lineHeight: '1.4' }}>
@@ -233,10 +217,7 @@ function HelpModal({ lang, onClose }) {
                             {H.fields.title}
                         </div>
                         {H.fields.items.map(([field, desc], i) => (
-                            <div key={i} style={{
-                                display: 'flex', gap: '14px', padding: '8px 0',
-                                borderBottom: '1px solid #0e2035',
-                            }}>
+                            <div key={i} style={{ display: 'flex', gap: '14px', padding: '8px 0', borderBottom: '1px solid #0e2035' }}>
                                 <span style={{ color: '#f5a623', fontFamily: 'monospace', fontSize: '11px', minWidth: '120px', flexShrink: 0 }}>
                                     {field}
                                 </span>
@@ -265,15 +246,11 @@ export default function SearchBar({ query, setQuery, options, setOptions, onSear
 
     return (
         <div style={{ position: 'relative', zIndex: 1 }}>
-
             {/* Input principal */}
             <div style={{
-                background: '#030810',
-                border: '1px solid #1a3050',
-                borderRadius: '6px',
-                padding: '6px',
-                display: 'flex',
-                gap: '6px',
+                background: '#030810', border: '1px solid #1a3050',
+                borderRadius: '6px', padding: '6px',
+                display: 'flex', gap: '6px',
                 boxShadow: '0 0 60px #04101e',
             }}>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 16px' }}>
@@ -295,14 +272,10 @@ export default function SearchBar({ query, setQuery, options, setOptions, onSear
                     onClick={() => setShowHelp(true)}
                     title={lang === 'pt' ? 'Como pesquisar' : 'How to search'}
                     style={{
-                        padding: '10px 14px',
-                        background: 'transparent',
-                        border: '1px solid #0e2535',
-                        borderRadius: '4px',
-                        color: '#2a5a7a',
-                        fontFamily: 'monospace', fontSize: '13px',
-                        cursor: 'pointer', transition: 'all 0.2s',
-                        flexShrink: 0,
+                        padding: '10px 14px', background: 'transparent',
+                        border: '1px solid #0e2535', borderRadius: '4px',
+                        color: '#2a5a7a', fontFamily: 'monospace', fontSize: '13px',
+                        cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0,
                     }}
                     onMouseEnter={e => { e.target.style.color = '#4a9fd4'; e.target.style.borderColor = '#1a4a6a'; }}
                     onMouseLeave={e => { e.target.style.color = '#2a5a7a'; e.target.style.borderColor = '#0e2535'; }}
@@ -314,13 +287,11 @@ export default function SearchBar({ query, setQuery, options, setOptions, onSear
                     style={{
                         padding: '12px 28px',
                         background: loading ? '#040c18' : 'linear-gradient(135deg, #0a3a6a, #0a2a50)',
-                        border: '1px solid #1a4a7a',
-                        borderRadius: '4px',
+                        border: '1px solid #1a4a7a', borderRadius: '4px',
                         color: loading ? '#1a3a5a' : '#4a9fd4',
                         fontFamily: 'monospace', fontSize: '12px',
                         letterSpacing: '0.2em', cursor: loading ? 'not-allowed' : 'pointer',
-                        textTransform: 'uppercase', transition: 'all 0.2s',
-                        flexShrink: 0,
+                        textTransform: 'uppercase', transition: 'all 0.2s', flexShrink: 0,
                     }}
                 >{loading ? (lang === 'pt' ? 'BUSCANDO…' : 'QUERYING…') : 'QUERY'}</button>
             </div>
@@ -329,10 +300,7 @@ export default function SearchBar({ query, setQuery, options, setOptions, onSear
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px', alignItems: 'center' }}>
                 <span style={{ color: '#2a5a7a', fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.15em' }}>BASE:</span>
                 {['SIMBAD', 'VizieR'].map(src => (
-                    <span key={src} style={{
-                        padding: '3px 12px', borderRadius: '2px', fontFamily: 'monospace', fontSize: '10px',
-                        border: '1px solid #2a7ab044', color: '#4a9fd4',
-                    }}>{src}</span>
+                    <span key={src} style={{ padding: '3px 12px', borderRadius: '2px', fontFamily: 'monospace', fontSize: '10px', border: '1px solid #2a7ab044', color: '#4a9fd4' }}>{src}</span>
                 ))}
 
                 <span style={{ color: '#0e2535', fontFamily: 'monospace', fontSize: '12px', margin: '0 2px' }}>|</span>
@@ -342,7 +310,7 @@ export default function SearchBar({ query, setQuery, options, setOptions, onSear
                     <button key={cat.id} onClick={() => toggleOption(cat.id)} style={{
                         padding: '3px 12px', borderRadius: '2px', fontFamily: 'monospace', fontSize: '10px',
                         letterSpacing: '0.08em', cursor: 'pointer', border: '1px solid',
-                        background: options[cat.id] ? `${cat.color}18` : 'transparent',
+                        background: options[cat.id] ? cat.color + '18' : 'transparent',
                         borderColor: options[cat.id] ? cat.color : '#1a3a5a',
                         color: options[cat.id] ? cat.color : '#2a5a7a',
                         transition: 'all 0.15s',

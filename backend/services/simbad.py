@@ -102,17 +102,15 @@ def query_single_object(name: str) -> dict | None:
         return None
 
 
-def query_by_type(otype_code: str, limit: int = 30) -> list:
+def query_by_type(otype: str, limit: int = 20, offset: int = 0) -> list:
     try:
         query = f"""
-            SELECT TOP {limit}
-                b.main_id, b.ra, b.dec, b.otype,
-                b.sp_type, b.plx_value,
-                b.rvz_radvel, b.rvz_redshift
-            FROM basic AS b
-            WHERE b.otype = '{otype_code}'
-        """
-
+        SELECT TOP {limit}
+            ...
+        FROM basic
+        WHERE otype = '{otype}'
+        OFFSET {offset}
+    """
         result = Simbad.query_tap(query)
 
         if result is None or len(result) == 0:

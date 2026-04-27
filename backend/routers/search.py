@@ -156,9 +156,13 @@ async def search_object(
 
 @router.get('/type', response_model=ListResponse)
 async def search_by_type(
-    query: str = Query(..., description='Tipo: wolf rayet, pulsar, cepheid...'),
-    limit: int = Query(20, ge=1, le=100),
+    query:  str = Query(...),
+    limit:  int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
 ):
+    ...
+    raw_list = query_by_type(otype_code, limit=limit, offset=offset)
+
     '''Busca objetos por tipo ou classe.'''
     query_lower  = query.lower().strip()
     otype_code   = None

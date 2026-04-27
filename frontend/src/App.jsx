@@ -37,7 +37,7 @@ const LANG = {
 };
 
 const CLASS_KEYWORDS = [
-  'wolf rayet', 'pulsar', 'cepheid', 'white dwarf', 'galaxy',
+  'wolf rayet', 'wolf-rayet', 'pulsar', 'cepheid', 'white dwarf', 'galaxy',
   'quasar', 'neutron star', 'supergiant', 'red giant', 'brown dwarf',
   'planetary nebula', 'supernova', 'black hole', 'agn', 'rr lyrae',
 ];

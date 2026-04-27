@@ -19,11 +19,10 @@ export async function searchObject(name, options = {}) {
     return response.data;
 }
 
-export async function searchByType(query, limit = 20) {
-    const response = await api.get('/search/type', { params: { query, limit } });
+export async function searchByType(query, limit = 20, offset = 0) {
+    const response = await api.get('/search/type', { params: { query, limit, offset } });
     return response.data;
 }
-
 
 export async function checkHealth() {
     const response = await api.get('/');
