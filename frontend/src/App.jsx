@@ -212,7 +212,57 @@ export default function App() {
             </div>
           ))}
         </div>
-
+        {/* Class Search */}
+        <div style={{ marginBottom: '28px' }}>
+          <div style={{ color: '#3a7a9a', fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.2em', marginBottom: '12px' }}>
+            {lang === 'pt' ? '🔍 BUSCA POR CLASSE DE OBJETO' : '🔍 SEARCH BY OBJECT CLASS'}
+          </div>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {[
+              { label: 'Wolf-Rayet', q: 'wolf rayet', color: '#ff6a3d' },
+              { label: 'Pulsar', q: 'pulsar', color: '#4a9fd4' },
+              { label: 'Cefeida', q: 'cepheid', color: '#f5c542' },
+              { label: 'Anã Branca', q: 'white dwarf', color: '#c8dff0' },
+              { label: 'Gigante Vermelha', q: 'red giant', color: '#f57a4a' },
+              { label: 'Supergigante', q: 'supergiant', color: '#f5a030' },
+              { label: 'Nebulosa Planetária', q: 'planetary nebula', color: '#4af5c2' },
+              { label: 'Galáxia', q: 'galaxy', color: '#b06af5' },
+              { label: 'Quasar', q: 'quasar', color: '#9a6af5' },
+              { label: 'AGN', q: 'agn', color: '#7a4af5' },
+              { label: 'Buraco Negro', q: 'black hole', color: '#4a4a4a' },
+              { label: 'Anã Marrom', q: 'brown dwarf', color: '#8a5a3a' },
+              { label: 'RR Lyrae', q: 'rr lyrae', color: '#f5e642' },
+              { label: 'Aglomerado Aberto', q: 'open cluster', color: '#4af5c2' },
+              { label: 'Aglomerado Globular', q: 'globular', color: '#4ac2f5' },
+            ].map(cls => (
+              <button
+                key={cls.q}
+                onClick={() => { setQuery(cls.label); handleSearch(cls.q); }}
+                style={{
+                  padding: '5px 14px',
+                  background: 'transparent',
+                  border: '1px solid ' + cls.color + '44',
+                  borderRadius: '3px',
+                  color: cls.color,
+                  fontFamily: 'monospace',
+                  fontSize: '11px',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = cls.color + '18';
+                  e.currentTarget.style.borderColor = cls.color;
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.borderColor = cls.color + '44';
+                }}
+              >
+                {lang === 'pt' ? cls.label : cls.q}
+              </button>
+            ))}
+          </div>
+        </div>
         {/* Search */}
         <SearchBar
           query={query} setQuery={setQuery}
