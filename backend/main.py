@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from routers import search
 
 load_dotenv()
 
@@ -22,7 +23,6 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=["*"],
 )
-from routers import search
 app.include_router(search.router)
 
 
