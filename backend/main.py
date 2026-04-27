@@ -10,17 +10,16 @@ app = FastAPI(
     version='0.2.0',
 )
 
-from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://cosmic-axolotl.github.io",
-        "http://localhost:5173",  # dev local
+        "http://localhost:5173",  
         "http://localhost:3000",
     ],
     allow_credentials=True,
-    allow_methods=['GET','POST','OPTIONS'],
+    allow_methods=['*'],
     allow_headers=["*"],
 )
 from routers import search
