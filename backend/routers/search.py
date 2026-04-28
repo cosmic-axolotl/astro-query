@@ -13,7 +13,7 @@ from models.schemas import (
 )
 
 router = APIRouter(
-    prefix='/search',
+    prefix='',
     tags=['Search'],
 )
 
@@ -66,7 +66,6 @@ async def search_object(
             detail=f'Objeto {name!r} não encontrado.',
         )
 
-    # Gaia — enriquece se tiver coordenadas
     gaia_data = None
     if include_gaia and raw.get('ra') and raw.get('dec'):
         try:
@@ -79,7 +78,6 @@ async def search_object(
                     raw['sources'] = ['SIMBAD']
                 if 'Gaia DR3' not in raw['sources']:
                     raw['sources'].append('Gaia DR3')
-                # Gaia tem prioridade para distância
                 if gaia.get('distance_ly'):
                     raw['distance_ly'] = gaia['distance_ly']
                     raw['distance_pc'] = gaia['distance_pc']
@@ -153,16 +151,12 @@ async def search_object(
         confidence='high',
     )
 
-
 @router.get('/type', response_model=ListResponse)
 async def search_by_type(
     query:  str = Query(...),
     limit:  int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
 ):
-    ...
-    raw_list = query_by_type(otype_code, limit=limit, offset=offset)
-
     '''Busca objetos por tipo ou classe.'''
     query_lower  = query.lower().strip()
     otype_code   = None
@@ -183,7 +177,7 @@ async def search_by_type(
             },
         )
 
-    raw_list = query_by_type(otype_code, limit=limit)
+    raw_list = query_by_type(otype_code, limit=limit, offset=offset)
     items    = [ListItem(**r) for r in raw_list]
 
     return ListResponse(
