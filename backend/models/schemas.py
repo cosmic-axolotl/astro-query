@@ -118,6 +118,7 @@ class AdsArticle(BaseModel):
 class Enrichments(BaseModel):
     hipparcos:    Optional[HipparcosData]    = None
     two_mass:     Optional[TwoMassData]      = None
+    ads_articles: Optional[List[AdsArticle]] = None 
 
 class SingleResponse(BaseModel):
     mode:        str = 'single'
@@ -126,4 +127,3 @@ class SingleResponse(BaseModel):
     sources:     List[str] = []
     confidence:  str = 'high'
     warnings:    Optional[str] = None
-    ads_articles: Optional[List[AdsArticle]] = None
