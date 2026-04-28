@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routers import search
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -9,6 +10,7 @@ app = FastAPI(
     version='0.2.0',
 )
 
+app.include_router(search.router)
 
 app = FastAPI()
 origins = [
@@ -24,7 +26,6 @@ app.add_middleware(
     allow_methods=["*"], 
     allow_headers=["*"], 
 )
-
 
 @app.get('/', tags=['Health'])
 async def root():
