@@ -106,11 +106,11 @@ def query_by_type(otype: str, limit: int = 20, offset: int = 0) -> list:
     try:
         query = f"""
         SELECT TOP {limit}
-            ...
+            main_id, ra, dec, otype, sp_type, plx_value, rvz_radvel, rvz_redshift
         FROM basic
         WHERE otype = '{otype}'
         OFFSET {offset}
-    """
+        """
         result = Simbad.query_tap(query)
 
         if result is None or len(result) == 0:
@@ -119,8 +119,8 @@ def query_by_type(otype: str, limit: int = 20, offset: int = 0) -> list:
         return [_tap_row_to_dict(row) for row in result]
 
     except Exception as e:
-        logger.error(f'Erro ao buscar tipo {otype_code!r}: {e}')
-        return []
+        logger.error(f'Erro ao buscar tipo {otype!r}: {e}')
+        return []    
     
 def query_cluster_members(canonical_name: str, limit: int = 50) -> list:
     '''
