@@ -13,7 +13,7 @@ from models.schemas import (
 )
 
 router = APIRouter(
-    prefix='',
+    prefix='/search',
     tags=['Search'],
 )
 
